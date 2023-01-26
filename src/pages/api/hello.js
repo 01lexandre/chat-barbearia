@@ -55,7 +55,8 @@ async function sendMesage(token, session, numero, message) {
   //   .catch(error => console.log('error', error));
 
 
-  const response = await fetch(API_URL+'/api/'+session+'/send-message', requestOptions)
+  const response = await fetch(API_URL+'/api/'+session+'/send-list-message', requestOptions)
+  // const response = await fetch(API_URL+'/api/'+session+'/send-message', requestOptions)
   const data = await response.json()
   console.log('sendMesage', data)
 }
