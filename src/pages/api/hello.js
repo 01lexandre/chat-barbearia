@@ -118,12 +118,7 @@ export default async function handler(req, res) {
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
 
-  const INICIO = 'inicio'
-  const RECONHECIMENTO = 'RECONHECIMENTO'
-  const SERVICOS = 'SERVICOS'
-  const AGENDAMENTO_DIA = 'AGENDAMENTO_DIA'
-  const AGENDAMENTO_HORA = 'AGENDAMENTO_HORA'
-  const FINALIZAR = 'FINALIZAR'
+
 
 
   // redis.set(data.from, {ETAPA: AGENDAMENTO_HORA })
@@ -132,26 +127,43 @@ export default async function handler(req, res) {
   if (firstWord === '/bot') {
     await sendMesage(token.token, data.session, data.from,'Ola qual seu nome?')
   }
-  await startFluxo(data.from)
+  await startFluxo(data, token.token)
   res.status(200).json({ re: req.body})
 }
+const INICIO = 'inicio'
+const RECONHECIMENTO = 'RECONHECIMENTO'
+const SERVICOS = 'SERVICOS'
+const AGENDAMENTO_DIA = 'AGENDAMENTO_DIA'
+const AGENDAMENTO_HORA = 'AGENDAMENTO_HORA'
+const FINALIZAR = 'FINALIZAR'
 
-async function startFluxo (from) {
-  console.log('from', from)
+async function startFluxo (data, token) {
+  console.log('from', data.from)
   let dbFluxo = null
 
-  redis.get(from).then((result) => {
+  redis.get(data.from).then((result) => {
     console.log(result); // Prints "value"
     dbFluxo = result
   });
 
-  // await redis.get(from, async (err, result) => {
-  //   if (err) {
-  //     dbFluxo = false
-  //   } else {
-  //     dbFluxo = JSON.parse(result)
-  //   }
-  // });
+  console.log('from', result)
+  let firstWord = data.body.substring(0, data.body.indexOf(" "))
+
+  switch (dbFluxo) {
+    case null:
+      redis.set(data.from, {status: INICIO})
+      if (firstWord === '/bot') {
+        await sendMesage(token, data.session, data.from,'Ola qual seu nome?')
+      }
+      break;
+    case 'Mangoes':
+    case 'Papayas':
+      console.log('Mangoes and papayas are $2.79 a pound.');
+      // Expected output: "Mangoes and papayas are $2.79 a pound."
+      break;
+    default:
+      console.log(`Sorry, we are out of ${expr}.`);
+  }
 
   console.log('aquiiiiiiiiii', dbFluxo)
 }
