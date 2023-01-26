@@ -4,6 +4,40 @@ const redis = new Redis("rediss://default:AVNS_2quGsE82rY0rewkjm8t@naweby-db-ses
 
 const API_URL = 'https://wpp.treeunfe.com.br'
 
+
+
+async function sendMesage(token, session, message) {
+
+
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + token);
+
+  const raw = JSON.stringify({
+    "phone": "5544920023965",
+    // "phone": "5544998071332",
+    "message": message,
+    "isGroup": false
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+  //
+  // fetch(API_URL+'/api/'+data.session+'/send-message', requestOptions)
+  //   .then(response => response.text())
+  //   .then(result => console.log(result))
+  //   .catch(error => console.log('error', error));
+
+
+  const response = await fetch(API_URL+'/api/'+session+'/send-message', requestOptions)
+  const data = await response.json()
+  console.log('sendMesage', data)
+}
+
 export default async function handler(req, res) {
 
   const data = JSON.parse(req.body)
@@ -23,30 +57,7 @@ export default async function handler(req, res) {
 
 
   console.error('token', token.token)
-
-
-  const myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  myHeaders.append("Authorization", "Bearer " + token.token);
-
-  const raw = JSON.stringify({
-    "phone": "5544920023965",
-    // "phone": "5544998071332",
-    "message": JSON.stringify(req.body),
-    "isGroup": false
-  });
-
-  const requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  };
-
-  fetch(API_URL+'/api/'+data.session+'/send-message', requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
+  await sendMesage(token.token, data.session, data)
 
   res.status(200).json({ re: req.body})
 }
