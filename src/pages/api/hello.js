@@ -328,7 +328,7 @@ async function startFluxo (data, token) {
     });
     await sendAlllistMesage(token, data.session, raw)
 
-    const storageRegis = getRegis(data.from)
+    const storageRegis = await getRegis(data.from)
     storageRegis.status = AGENDAMENTO_HORA
     storageRegis.dia = data.body
 
@@ -337,7 +337,7 @@ async function startFluxo (data, token) {
 
 
 
-    const storageRegis = getRegis(data.from)
+    const storageRegis = await getRegis(data.from)
     await sendMesage(token,
       data.session,
       data.from,
