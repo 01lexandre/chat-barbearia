@@ -151,8 +151,8 @@ async function startFluxo (data, token) {
 
   switch (dbFluxo) {
     case null:
-      redis.set(data.from, {status: INICIO})
       if (firstWord === '/bot') {
+        redis.set(data.from, {status: INICIO})
         await sendMesage(token, data.session, data.from,'Ola qual seu nome?')
       }
       break;
