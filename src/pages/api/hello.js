@@ -286,7 +286,7 @@ async function startFluxo (data, token) {
     const raw = JSON.stringify({
       "phone": data.from.split('@')[0],
       "buttonText": "Ver opções",
-      "description": "Estes sao os horarios que tenho disponivel para "+ moment(dia).calendar(),
+      "description": "Estes sao os horarios que tenho disponivel para "+dia+ ' ' + moment(dia).calendar(),
       "sections": [
         {
           "title": "Dias",
