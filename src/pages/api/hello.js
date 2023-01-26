@@ -102,15 +102,17 @@ export default async function handler(req, res) {
   await startFluxo(data, token.token)
   res.status(200).json({ re: req.body})
 }
+
+const isDEV = true
+
 const INICIO = 'inicio'
-const RECONHECIMENTO = 'RECONHECIMENTO'
 const SERVICOS = 'SERVICOS'
+const RECONHECIMENTO = 'RECONHECIMENTO'
 const AGENDAMENTO_DIA = 'AGENDAMENTO_DIA'
 const AGENDAMENTO_HORA = 'AGENDAMENTO_HORA'
 const FINALIZAR = 'FINALIZAR'
 
 async function startFluxo (data, token) {
-  console.log('from', data.from)
   let dbFluxo = {
     status: INICIO
   }
@@ -125,38 +127,55 @@ async function startFluxo (data, token) {
     }
 
   });
-  console.log('redis ->', dbFluxo)
+
+  console.log('START FLUXO from ===>', data.from, 'status ==> ', dbFluxo)
+
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
+  if (firstWord === '/del') {
+    redis.dump('NW_'+data.from)
+  }
   if (dbFluxo.status === INICIO) {
     if (firstWord === '/bot') {
-      redis.set('NW_'+data.from, JSON.stringify({status: INICIO}))
 
-      await sendMesage(token, data.session, data.from,'HOLAAA! o/')
+      await sendMesage(token,
+        data.session,
+        data.from,
+        'Olá! Bem-vindo à *ZAPBarberShop*. Estamos prontos para atender suas necessidades de corte de cabelo e barba, desde cortes clássicos até os mais modernos. Temos uma equipe de barbeiros experientes prontos para fazer você se sentir e parecer incrível. Agende hoje e venha experimentar a qualidade do nosso atendimento e dos nossos serviços.'
+      )
 
       const raw = JSON.stringify({
         "phone": data.from.split('@')[0],
         "buttonText": "Ver opções",
-        "description": "No que podemos estar te ajudando?",
+        "description": "Como posso ajudar você hoje? ",
         "sections": [
           {
             "title": "Serviços",
             "rows": [
               {
                 "rowId": "opcao_1",
-                "title": "Cortar o Cabelo",
+                "title": (isDEV ? '/bot ' : '')+"Cortar o Cabelo",
               },
               {
                 "rowId": "opcao_2",
-                "title": "Cortar a Barba",
+                "title": (isDEV ? '/bot ' : '')+"Cortar a Barba",
               }
             ]
           }
         ],
         "isGroup": false
       });
-
       await sendAlllistMesage(token, data.session, raw)
+      redis.set('NW_'+data.from, JSON.stringify({status: SERVICOS }))
+    }
+  } else if (dbFluxo.status === SERVICOS) {
+    if (firstWord === '/bot') {
+      // 'Ótimo! Temos vários estilos de corte de cabelo disponíveis, desde cortes clássicos até os mais modernos.'
+      await sendMesage(token,
+        data.session,
+        data.from,
+        'Ótimo! ' + data.body
+      )
     }
   }
 
