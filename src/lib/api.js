@@ -43,7 +43,8 @@ export async function getStartSession(response) {
       'Content-Language': 'pt-BR'
     }
   };
-  const data = await axios.post(API_URL+'/api/'+response.session+'/start-session', {webhook: 'https://next-chatbot-barbearia.vercel.app/api/hello'}, config).then((x) => {return x})
+  const rota = 'https://chat-barbearia.vercel.app/api/hello'
+  const data = await axios.post(API_URL+'/api/'+response.session+'/start-session', {webhook: rota}, config).then((x) => {return x})
   return data.data
 }
 export async function getCloseSession() {
