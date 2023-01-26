@@ -241,6 +241,7 @@ async function startFluxo (data, token) {
       ],
       "isGroup": false
     });
+    await sendAlllistMesage(token, data.session, raw)
   }
 
   console.log('aquiiiiiiiiii', dbFluxo)
