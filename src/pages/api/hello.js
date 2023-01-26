@@ -146,7 +146,14 @@ async function startFluxo (data, token) {
     dbFluxo = result
   });
 
-  console.log('redis ->', JSON.stringify(dbFluxo))
+  let userObj = JSON.parse(dbFluxo, (key, value) => {
+    if (typeof value === 'string') {
+      return value.toUpperCase();
+    }
+    return value;
+  });
+  console.log('redis ->', userObj)
+  console.log('redis2 ->', dbFluxo)
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   switch (dbFluxo) {
