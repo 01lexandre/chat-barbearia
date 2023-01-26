@@ -142,7 +142,7 @@ async function startFluxo (data, token) {
   let dbFluxo = null
 
   await redis.get('NW_'+data.from).then((result) => {
-    dbFluxo = result
+    dbFluxo = JSON.parse(result)
   });
   console.log('redis ->', dbFluxo)
   console.log('redis ->', typeof dbFluxo)
