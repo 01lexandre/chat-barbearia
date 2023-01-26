@@ -146,7 +146,7 @@ async function startFluxo (data, token) {
     dbFluxo = result
   });
 
-  console.log('redis ->', JSON.parse(dbFluxo))
+  console.log('redis ->', JSON.stringify(dbFluxo))
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   switch (dbFluxo) {
@@ -157,7 +157,7 @@ async function startFluxo (data, token) {
       }
       break;
     default:
-      console.log(`Sorry, we are out of ${expr}.`);
+      console.log(`SROLAAAAAAAAAAAAA`);
   }
 
   console.log('aquiiiiiiiiii', dbFluxo)
