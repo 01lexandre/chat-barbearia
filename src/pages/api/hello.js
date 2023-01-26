@@ -40,7 +40,8 @@ async function sendMesage(token, session, message) {
 
 export default async function handler(req, res) {
 
-  const data = JSON.parse(req.body)
+  // const data = JSON.parse(req.body)
+  const data = req.body
   let token = null
 
   console.error('session', data.session)
