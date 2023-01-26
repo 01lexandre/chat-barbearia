@@ -47,6 +47,7 @@ export default function Home() {
         console.error(error);
       }
   }
+
   useEffect(() => {
     const token = storage.getStorage(this, 'authw')
     console.log(token)
@@ -69,6 +70,11 @@ export default function Home() {
     } else {
       setIsConnect(false)
     }
+
+
+
+
+
   }, [])
 
 

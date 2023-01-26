@@ -107,10 +107,20 @@ const isDEV = true
 
 const INICIO = 'inicio'
 const SERVICOS = 'SERVICOS'
-const RECONHECIMENTO = 'RECONHECIMENTO'
 const AGENDAMENTO_DIA = 'AGENDAMENTO_DIA'
 const AGENDAMENTO_HORA = 'AGENDAMENTO_HORA'
+const RECONHECIMENTO = 'RECONHECIMENTO'
 const FINALIZAR = 'FINALIZAR'
+
+
+function diaMes (date) {
+  let day = date.getDate();
+  if(day < 10) {day = "0"+day;}
+  let month = date.getMonth() + 1;
+  if(month < 10) {month = "0"+month;}
+  const dateFormat = day + "/" + month;
+  return dateFormat
+}
 
 async function startFluxo (data, token) {
   let dbFluxo = {
@@ -181,6 +191,38 @@ async function startFluxo (data, token) {
         data.from,
         'Ótimo! ' + data.body
       )
+
+      const today = new Date();
+      const tomorrow = new Date();
+      tomorrow.setDate(today.getDate()+1);
+
+      const semana = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
+      // console.log(tomorrow);
+
+      const raw = JSON.stringify({
+        "phone": data.from.split('@')[0],
+        "buttonText": "Ver opções",
+        "description": "Veja as opções de dias que tenho disponiveis? ",
+        "sections": [
+          {
+            "title": "Dias",
+            "rows": [
+              {
+                "rowId": "opcao_1",
+                "title": (isDEV ? '/bot ' : '')+semana[today.getDate()+1] + ' - '+ diaMes(tomorrow),
+              },
+              {
+                "rowId": "opcao_1",
+                "title": (isDEV ? '/bot ' : '')+semana[today.getDate()+2] + ' - '+ diaMes(tomorrow.setDate(today.getDate()+2)),
+              },
+            ]
+          }
+        ],
+        "isGroup": false
+      });
+      await sendAlllistMesage(token, data.session, raw)
+
+      redis.set('NW_'+data.from, JSON.stringify({status: AGENDAMENTO_DIA, opcao: data.body}))
     }
   }
 
