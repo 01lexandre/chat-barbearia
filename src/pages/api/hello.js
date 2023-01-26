@@ -142,18 +142,9 @@ async function startFluxo (data, token) {
   let dbFluxo = null
 
   await redis.get(data.from).then((result) => {
-    console.log(result); // Prints "value"
     dbFluxo = result
   });
-
-  let userObj = JSON.parse(dbFluxo, (key, value) => {
-    if (typeof value === 'string') {
-      return value.toUpperCase();
-    }
-    return value;
-  });
-  console.log('redis ->', userObj)
-  console.log('redis2 ->', dbFluxo)
+  console.log('redis ->', dbFluxo)
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   switch (dbFluxo) {
