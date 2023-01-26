@@ -254,23 +254,23 @@ async function startFluxo (data, token) {
           "buttons": [
             {
               "id": "1",
-              "text": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('DD/MM/YY')
+              "text": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('DD/MM/YYYY')
             },
             {
               "id": "2",
-              "text": (isDEV ? '/bot ' : '')+moment().add(2, 'days').format('dddd') + ' - '+ moment().add(2, 'days').format('DD/MM/YY')
+              "text": (isDEV ? '/bot ' : '')+moment().add(2, 'days').format('dddd') + ' - '+ moment().add(2, 'days').format('DD/MM/YYYY')
             },
             {
               "id": "3",
-              "text": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM/YY')
+              "text": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM/YYYY')
             },
             {
               "id": "4",
-              "text": (isDEV ? '/bot ' : '')+moment().add(4, 'days').format('dddd') + ' - '+ moment().add(4, 'days').format('DD/MM/YY')
+              "text": (isDEV ? '/bot ' : '')+moment().add(4, 'days').format('dddd') + ' - '+ moment().add(4, 'days').format('DD/MM/YYYY')
             },
             {
               "id": "5",
-              "text": (isDEV ? '/bot ' : '')+moment().add(5, 'days').format('dddd') + ' - '+ moment().add(5, 'days').format('DD/MM/YY')
+              "text": (isDEV ? '/bot ' : '')+moment().add(5, 'days').format('dddd') + ' - '+ moment().add(5, 'days').format('DD/MM/YYYY')
             },
           ],
           "title": "Veja as opções de dias que tenho disponiveis?",
@@ -283,10 +283,11 @@ async function startFluxo (data, token) {
     }
   } else if (dbFluxo.status === AGENDAMENTO_DIA) {
     const dia = data.body.split(' - ')[1]
+    const diaForm = dia.split('/')[2] + '-' + dia.split('/')[1] + '-' + dia.split('/')[0]
     const raw = JSON.stringify({
       "phone": data.from.split('@')[0],
       "buttonText": "Ver opções",
-      "description": "Estes sao os horarios que tenho disponivel para "+dia+ ' ' + moment(dia).calendar(),
+      "description": "Estes sao os horarios que tenho disponivel para "+diaForm+ ' ' + moment(diaForm).calendar(),
       "sections": [
         {
           "title": "Dias",
