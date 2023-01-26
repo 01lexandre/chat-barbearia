@@ -45,9 +45,6 @@ async function sendMesage(token, session, numero, message) {
 
 async function sendAlllistMesage(token, session, raw) {
 
-  console.log('send ', token, session, message)
-
-
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + token);
@@ -127,6 +124,7 @@ async function startFluxo (data, token) {
   if (dbFluxo.status === INICIO) {
     if (firstWord === '/bot') {
       redis.set('NW_'+data.from, JSON.stringify({status: INICIO}))
+
       await sendMesage(token, data.session, data.from,'HOLAAA! o/')
 
       const raw = JSON.stringify({
