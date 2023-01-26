@@ -27,7 +27,19 @@ export default function Home() {
       try {
         console.log(value)
         const response = await postInitialGetToken(value);
-        console.log(response)
+        console.log(JSON.stringify(response))
+        const requestOptions = {
+          method: 'POST',
+          headers: {},
+          body: JSON.stringify(response),
+          redirect: 'follow'
+        };
+        fetch('/api/db', requestOptions)
+          .then(response => response.text())
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
+
+
         await startConecct(response)
 
       } catch(error) {
@@ -43,15 +55,24 @@ export default function Home() {
         // You can await here
         const response = await getCheckSession();
         console.log(response)
-        setIsConnect(response.status)
+        if (response.status) {
+          setIsConnect(response.status)
+
+        } else {
+          setIsConnect(false)
+          await storage.setStorage(this, 'authw', {})
+        }
+
         // ...
       }
       fetchData();
     } else {
       setIsConnect(false)
     }
-
   }, [])
+
+
+
 
   if (isConnect) {
     return <Box>Conectado</Box>

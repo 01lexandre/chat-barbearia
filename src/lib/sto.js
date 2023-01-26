@@ -1,5 +1,6 @@
 const nameStorage = 'rintNW'
 const INTENBUY = 'INTEN_BUY'
+// import { createClient } from 'redis'
 
 const storage = {
   initStorage (app) {
@@ -22,7 +23,14 @@ const storage = {
       return data[name]
     }
   },
-  setStorage (app, name, val) {
+  async setStorage (app, name, val) {
+    // const client = createClient();
+    // await client.connect();
+    //
+    // await client.set('key', 'value');
+    // const value = await client.get('key');
+    // await client.disconnect();
+
     const data = JSON.parse(window.localStorage.getItem(nameStorage))
     if (data) {
       data[name] = val
