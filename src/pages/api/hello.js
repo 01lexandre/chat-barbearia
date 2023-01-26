@@ -16,7 +16,8 @@ async function sendMesage(token, session, numero, message) {
   myHeaders.append("Authorization", "Bearer " + token);
 
   const raw = JSON.stringify({
-    "phone": "5544920023965",
+    // "phone": "5544920023965",
+    "phone": numero.split('@')[0],
     // "phone": "5544998071332",
     "message": JSON.stringify(message),
     "isGroup": false
