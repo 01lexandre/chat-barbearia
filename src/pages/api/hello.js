@@ -3,6 +3,7 @@
 import {sendMessage} from "@/lib/api";
 import axios from "axios";
 
+const API_URL = 'https://wpp.treeunfe.com.br'
 export default async function handler(req, res) {
 
   // sendMessage({msg: JSON.stringify(req.body)})
@@ -24,5 +25,5 @@ export default async function handler(req, res) {
   return data.data
 
 
-  res.status(200).json({ re: data.data })
+  res.status(200).json({ re: 'data.data '})
 }
