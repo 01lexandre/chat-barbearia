@@ -245,34 +245,6 @@ async function startFluxo (data, token) {
         data.from,
         'Ótimo! ' + data.body
       )
-      //
-      // const raw = JSON.stringify({
-      //   "phone": data.from.split('@')[0],
-      //   "buttonText": "Ver opções",
-      //   "description": "Veja as opções de dias que tenho disponiveis? ",
-      //   "sections": [
-      //     {
-      //       "title": "Dias",
-      //       "rows": [
-      //         {
-      //           "rowId": "opcao_1",
-      //           "title": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('DD/MM/YY'),
-      //         },
-      //         {
-      //           "rowId": "opcao_2",
-      //           "title": (isDEV ? '/bot ' : '')+moment().add(2, 'days').format('dddd') + ' - '+ moment().add(2, 'days').format('DD/MM/YY'),
-      //         },
-      //         {
-      //           "rowId": "opcao_2",
-      //           "title": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM/YY'),
-      //         },
-      //       ]
-      //     }
-      //   ],
-      //   "isGroup": false
-      // });
-      // await sendAlllistMesage(token, data.session, raw)
-
       const raw = JSON.stringify({
         "phone": data.from.split('@')[0],
         "message": "Selecione a data que desejar.",
@@ -372,18 +344,13 @@ async function startFluxo (data, token) {
 
     redis.set('NW_'+data.from, JSON.stringify(storageRegis))
   } else if (dbFluxo.status === RECONHECIMENTO) {
-    const storageRegis = await getRegis(data.from)
 
-    await sendMesage(token,
-      data.session,
-      data.from,
-      'Tudo certo '+ data.body
-    )
+    const storageRegis = await getRegis(data.from)
 
     const raw = JSON.stringify({
       "phone": data.from.split('@')[0],
       "options": {
-        "title": 'Seu '+ storageRegis.opcao +' está marcado para '+ storageRegis.dia +' às ' + data.body + 'está correto?',
+        "title": 'Tudo certo '+ data.body +'! Seu '+ storageRegis.opcao +' está marcado para '+ storageRegis.dia +' às ' + data.body + 'está correto?',
         "useTemplateButtons": "true",
         "buttons": [
           {
@@ -408,6 +375,7 @@ async function startFluxo (data, token) {
 
     let storageRegis = await getRegis(data.from)
     if (data.body === (isDEV ? '/bot ' : '') + 'Sim') {
+
       const raw = JSON.stringify({
         "phone": data.from.split('@')[0],
         'path': 'https://cdn.nawe.by/images/zabarbershop.png',
