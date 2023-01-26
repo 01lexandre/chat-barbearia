@@ -211,10 +211,10 @@ async function startFluxo (data, token) {
                 "rowId": "opcao_1",
                 "title": (isDEV ? '/bot ' : '')+semana[today.getDate()+1] + ' - '+ diaMes(tomorrow),
               },
-              {
-                "rowId": "opcao_1",
-                "title": (isDEV ? '/bot ' : '')+semana[today.getDate()+2] + ' - '+ diaMes(tomorrow.setDate(today.getDate()+2)),
-              },
+              // {
+              //   "rowId": "opcao_1",
+              //   "title": (isDEV ? '/bot ' : '')+semana[today.getDate()+2] + ' - '+ diaMes(tomorrow.setDate(today.getDate()+2)),
+              // },
             ]
           }
         ],
