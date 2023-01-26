@@ -69,6 +69,31 @@ async function sendAlllistMesage(token, session, raw) {
   console.log('sendMesage', data)
 }
 
+async function sendButton(token, session, raw) {
+
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + token);
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+  //
+  // fetch(API_URL+'/api/'+data.session+'/send-message', requestOptions)
+  //   .then(response => response.text())
+  //   .then(result => console.log(result))
+  //   .catch(error => console.log('error', error));
+
+
+  const response = await fetch(API_URL+'/api/'+session+'/send-buttons', requestOptions)
+  // const response = await fetch(API_URL+'/api/'+session+'/send-message', requestOptions)
+  const data = await response.json()
+  console.log('sendMesage', data)
+}
+
 export default async function handler(req, res) {
 
   // const data = JSON.parse(req.body)
@@ -193,33 +218,68 @@ async function startFluxo (data, token) {
         data.from,
         'Ótimo! ' + data.body
       )
+      //
+      // const raw = JSON.stringify({
+      //   "phone": data.from.split('@')[0],
+      //   "buttonText": "Ver opções",
+      //   "description": "Veja as opções de dias que tenho disponiveis? ",
+      //   "sections": [
+      //     {
+      //       "title": "Dias",
+      //       "rows": [
+      //         {
+      //           "rowId": "opcao_1",
+      //           "title": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('DD/MM/YY'),
+      //         },
+      //         {
+      //           "rowId": "opcao_2",
+      //           "title": (isDEV ? '/bot ' : '')+moment().add(2, 'days').format('dddd') + ' - '+ moment().add(2, 'days').format('DD/MM/YY'),
+      //         },
+      //         {
+      //           "rowId": "opcao_2",
+      //           "title": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM/YY'),
+      //         },
+      //       ]
+      //     }
+      //   ],
+      //   "isGroup": false
+      // });
+      // await sendAlllistMesage(token, data.session, raw)
 
       const raw = JSON.stringify({
         "phone": data.from.split('@')[0],
-        "buttonText": "Ver opções",
-        "description": "Veja as opções de dias que tenho disponiveis? ",
-        "sections": [
-          {
-            "title": "Dias",
-            "rows": [
-              {
-                "rowId": "opcao_1",
-                "title": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('DD/MM/YY'),
-              },
-              {
-                "rowId": "opcao_2",
-                "title": (isDEV ? '/bot ' : '')+moment().add(2, 'days').format('dddd') + ' - '+ moment().add(2, 'days').format('DD/MM/YY'),
-              },
-              {
-                "rowId": "opcao_2",
-                "title": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM/YY'),
-              },
-            ]
-          }
-        ],
+        "message": "Hello World",
+        "options": {
+          "useTemplateButtons": "true",
+          "buttons": [
+            {
+              "id": "1",
+              "text": "Text 1"
+            },
+            {
+              "id": "2",
+              "phoneNumber": "554498005216",
+              "text": "Call Us"
+            },
+            {
+              "id": "3",
+              "url": "https://wppconnect-team.github.io/",
+              "text": "Long Life WPPCONNECT"
+            },
+            {
+              "id": "4",
+              "text": "Text 4"
+            },
+            {
+              "id": "5",
+              "text": "Text 5"
+            }
+          ],
+          "title": "Veja as opções de dias que tenho disponiveis?",
+        },
         "isGroup": false
       });
-      await sendAlllistMesage(token, data.session, raw)
+      await sendButton(token, data.session, raw)
 
       redis.set('NW_'+data.from, JSON.stringify({status: AGENDAMENTO_DIA, opcao: data.body}))
     }
