@@ -43,7 +43,7 @@ async function sendMesage(token, session, numero, message) {
 }
 
 
-async function sendAlllistMesage(token, session, numero, message) {
+async function sendAlllistMesage(token, session, raw) {
 
   console.log('send ', token, session, message)
 
@@ -51,31 +51,6 @@ async function sendAlllistMesage(token, session, numero, message) {
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   myHeaders.append("Authorization", "Bearer " + token);
-
-  const raw = JSON.stringify({
-    // "phone": "5544920023965",
-    "phone": numero.split('@')[0],
-    // "phone": "5544998071332",
-    // "message": JSON.stringify(message),
-    "buttonText": "CLIQUE AQUI",
-    "description": "Hello World",
-    "sections": [
-      {
-        "title": "Section 1",
-        "rows": [
-          {
-            "rowId": "my_custom_id",
-            "title": "Test 1",
-          },
-          {
-            "rowId": "2",
-            "title": "Test 2",
-          }
-        ]
-      }
-    ],
-    "isGroup": false
-  });
 
   const requestOptions = {
     method: 'POST',
@@ -145,18 +120,37 @@ async function startFluxo (data, token) {
     dbFluxo = JSON.parse(result)
   });
   console.log('redis ->', dbFluxo)
-  console.log('redis ->', typeof dbFluxo)
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
-  switch (dbFluxo) {
-    case null:
-      if (firstWord === '/bot') {
-        redis.set('NW_'+data.from, JSON.stringify({status: INICIO}))
-        await sendMesage(token, data.session, data.from,'Ola HOLAAA?')
-      }
-      break;
-    default:
-      console.log(`SROLAAAAAAAAAAAAA`);
+  if (dbFluxo === null && dbFluxo.status === INICIO) {
+    if (firstWord === '/bot') {
+      redis.set('NW_'+data.from, JSON.stringify({status: INICIO}))
+      await sendMesage(token, data.session, data.from,'HOLAAA! o/')
+
+      const raw = JSON.stringify({
+        "phone": data.from.split('@')[0],
+        "buttonText": "Ver opções",
+        "description": "No que podemos estar te ajudando?",
+        "sections": [
+          {
+            "title": "Serviços",
+            "rows": [
+              {
+                "rowId": "opcao_1",
+                "title": "Cortar o Cabelo",
+              },
+              {
+                "rowId": "opcao_2",
+                "title": "Cortar a Barba",
+              }
+            ]
+          }
+        ],
+        "isGroup": false
+      });
+
+      await sendAlllistMesage(token, data.session, data.from, raw)
+    }
   }
 
   console.log('aquiiiiiiiiii', dbFluxo)
