@@ -248,32 +248,30 @@ async function startFluxo (data, token) {
 
       const raw = JSON.stringify({
         "phone": data.from.split('@')[0],
-        "message": "Hello World",
+        "message": "Selecione a data que desejar.",
         "options": {
           "useTemplateButtons": "true",
           "buttons": [
             {
               "id": "1",
-              "text": "Text 1"
+              "text": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('DD/MM/YY')
             },
             {
               "id": "2",
-              "phoneNumber": "554498005216",
-              "text": "Call Us"
+              "text": (isDEV ? '/bot ' : '')+moment().add(2, 'days').format('dddd') + ' - '+ moment().add(2, 'days').format('DD/MM/YY')
             },
             {
               "id": "3",
-              "url": "https://wppconnect-team.github.io/",
-              "text": "Long Life WPPCONNECT"
+              "text": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM/YY')
             },
             {
               "id": "4",
-              "text": "Text 4"
+              "text": (isDEV ? '/bot ' : '')+moment().add(4, 'days').format('dddd') + ' - '+ moment().add(4, 'days').format('DD/MM/YY')
             },
             {
               "id": "5",
-              "text": "Text 5"
-            }
+              "text": (isDEV ? '/bot ' : '')+moment().add(5, 'days').format('dddd') + ' - '+ moment().add(5, 'days').format('DD/MM/YY')
+            },
           ],
           "title": "Veja as opções de dias que tenho disponiveis?",
         },
