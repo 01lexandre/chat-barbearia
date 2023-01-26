@@ -126,7 +126,7 @@ export default async function handler(req, res) {
   const FINALIZAR = 'FINALIZAR'
 
 
-  redis.set(data.from, {ETAPA: AGENDAMENTO_HORA })
+  // redis.set(data.from, {ETAPA: AGENDAMENTO_HORA })
 
 
   if (firstWord === '/bot') {
