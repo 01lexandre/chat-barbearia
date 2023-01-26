@@ -19,7 +19,26 @@ async function sendMesage(token, session, numero, message) {
     // "phone": "5544920023965",
     "phone": numero.split('@')[0],
     // "phone": "5544998071332",
-    "message": JSON.stringify(message),
+    // "message": JSON.stringify(message),
+    "buttonText": "CLIQUE AQUI",
+    "description": "Hello World",
+    "sections": [
+      {
+        "title": "Section 1",
+        "rows": [
+          {
+            "rowId": "my_custom_id",
+            "title": "Test 1",
+            "description": "Description 1"
+          },
+          {
+            "rowId": "2",
+            "title": "Test 2",
+            "description": "Description 2"
+          }
+        ]
+      }
+    ],
     "isGroup": false
   });
 
@@ -63,6 +82,11 @@ export default async function handler(req, res) {
   console.error('token', token.token)
 
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
+
+
+
+  // B
+
 
   if (firstWord === '/bot') {
     await sendMesage(token.token, data.session, data.from,'Ola qual seu nome?')
