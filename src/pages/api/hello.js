@@ -19,6 +19,43 @@ async function sendMesage(token, session, numero, message) {
     // "phone": "5544920023965",
     "phone": numero.split('@')[0],
     // "phone": "5544998071332",
+    "message": JSON.stringify(message),
+    "isGroup": false
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+  //
+  // fetch(API_URL+'/api/'+data.session+'/send-message', requestOptions)
+  //   .then(response => response.text())
+  //   .then(result => console.log(result))
+  //   .catch(error => console.log('error', error));
+
+
+  // const response = await fetch(API_URL+'/api/'+session+'/send-list-message', requestOptions)
+  const response = await fetch(API_URL+'/api/'+session+'/send-message', requestOptions)
+  const data = await response.json()
+  console.log('sendMesage', data)
+}
+
+
+async function sendAlllistMesage(token, session, numero, message) {
+
+  console.log('send ', token, session, message)
+
+
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + token);
+
+  const raw = JSON.stringify({
+    // "phone": "5544920023965",
+    "phone": numero.split('@')[0],
+    // "phone": "5544998071332",
     // "message": JSON.stringify(message),
     "buttonText": "CLIQUE AQUI",
     "description": "Hello World",
@@ -29,12 +66,10 @@ async function sendMesage(token, session, numero, message) {
           {
             "rowId": "my_custom_id",
             "title": "Test 1",
-            "description": "Description 1"
           },
           {
             "rowId": "2",
             "title": "Test 2",
-            "description": "Description 2"
           }
         ]
       }
@@ -78,20 +113,30 @@ export default async function handler(req, res) {
       token = JSON.parse(result)
     }
   });
-
-
   console.error('token', token.token)
 
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
 
+  const INICIO = 'inicio'
+  const RECONHECIMENTO = 'RECONHECIMENTO'
+  const SERVICOS = 'SERVICOS'
+  const AGENDAMENTO_DIA = 'AGENDAMENTO_DIA'
+  const AGENDAMENTO_HORA = 'AGENDAMENTO_HORA'
+  const FINALIZAR = 'FINALIZAR'
 
-  // B
+
+  redis.set(data.from, {ETAPA: AGENDAMENTO_HORA })
 
 
   if (firstWord === '/bot') {
     await sendMesage(token.token, data.session, data.from,'Ola qual seu nome?')
   }
-
+  await startFluxo(data.from)
   res.status(200).json({ re: req.body})
+}
+
+async function startFluxo (from) {
+  const dbFluxo = await redis.get(from)
+  console.log('aquiiiiiiiiii', dbFluxo)
 }
