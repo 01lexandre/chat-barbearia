@@ -61,19 +61,19 @@ export async function getCloseSession() {
 }
 
 
-export async function sendMessage(mgs) {
+export async function sendMessage(response) {
   // http://localhost:21465/api/{session}/check-connection-session
   // const sto = storage.getStorage(this, 'authw')
   const config = {
     headers: {
-      'Authorization': 'Bearer $2b$10$PNTMtbLp5Kqf5mXHUVRT5OcGd_0lDnYVgoQrKXiwTgYgk9hJ7EN9e',
+      'Authorization': 'Bearer $2b$10$VJWa6KLdCgdP6J8_2HIueuh3ljZSHuUJ3DS2Dp1c5lKOajQIbs2bu',
       // 'Content-Language': 'pt-BR'
     }
   };
-  const data = await axios.post(API_URL+'/api/nw-barbearia/send-message', {
+  const data = await axios.post(API_URL+'/api/nw-pedro0lexandre/send-message', {
     "phone": "5544920023965",
     // "phone": "5544998071332",
-    "message": mgs,
+    "message": response.mgs,
     "isGroup": false
   }, config).then((x) => {return x})
   return data.data
