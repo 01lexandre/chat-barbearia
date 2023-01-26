@@ -133,7 +133,7 @@ async function startFluxo (data, token) {
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   if (firstWord === '/del') {
-    redis.dump('NW_'+data.from)
+    redis.set('NW_'+data.from, JSON.stringify({status: INICIO }))
   }
   if (dbFluxo.status === INICIO) {
     if (firstWord === '/bot') {
