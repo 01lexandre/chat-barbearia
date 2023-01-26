@@ -116,7 +116,14 @@ async function startFluxo (data, token) {
   }
 
   await redis.get('NW_'+data.from).then((result) => {
-    dbFluxo = JSON.parse(result)
+    if (JSON.parse(result) === null ){
+      dbFluxo = {
+        status: INICIO
+      }
+    } else {
+      dbFluxo = JSON.parse(result)
+    }
+
   });
   console.log('redis ->', dbFluxo)
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
