@@ -138,5 +138,5 @@ export default async function handler(req, res) {
 
 async function startFluxo (from) {
   const dbFluxo = await redis.get(from)
-  console.log('aquiiiiiiiiii', dbFluxo)
+  console.log('aquiiiiiiiiii', JSON.parse(dbFluxo))
 }
