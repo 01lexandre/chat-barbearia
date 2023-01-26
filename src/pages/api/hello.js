@@ -146,7 +146,7 @@ async function startFluxo (data, token) {
     dbFluxo = result
   });
 
-  console.log('from', result)
+  console.log('from', dbFluxo)
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   switch (dbFluxo) {
@@ -155,11 +155,6 @@ async function startFluxo (data, token) {
         redis.set(data.from, {status: INICIO})
         await sendMesage(token, data.session, data.from,'Ola qual seu nome?')
       }
-      break;
-    case 'Mangoes':
-    case 'Papayas':
-      console.log('Mangoes and papayas are $2.79 a pound.');
-      // Expected output: "Mangoes and papayas are $2.79 a pound."
       break;
     default:
       console.log(`Sorry, we are out of ${expr}.`);
