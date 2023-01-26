@@ -8,6 +8,8 @@ const API_URL = 'https://wpp.treeunfe.com.br'
 
 async function sendMesage(token, session, message) {
 
+  console.log('send ', token, session, message)
+
 
   const myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
