@@ -18,7 +18,7 @@ async function sendMesage(token, session, message) {
   const raw = JSON.stringify({
     "phone": "5544920023965",
     // "phone": "5544998071332",
-    "message": message,
+    "message": JSON.stringify(message),
     "isGroup": false
   });
 
