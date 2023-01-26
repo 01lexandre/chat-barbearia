@@ -114,7 +114,9 @@ const FINALIZAR = 'FINALIZAR'
 
 async function startFluxo (data, token) {
   console.log('from', data.from)
-  let dbFluxo = null
+  let dbFluxo = {
+    status: INICIO
+  }
 
   await redis.get('NW_'+data.from).then((result) => {
     dbFluxo = JSON.parse(result)
@@ -122,7 +124,7 @@ async function startFluxo (data, token) {
   console.log('redis ->', dbFluxo)
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
-  if (dbFluxo === null && dbFluxo.status === INICIO) {
+  if (dbFluxo.status === INICIO) {
     if (firstWord === '/bot') {
       redis.set('NW_'+data.from, JSON.stringify({status: INICIO}))
       await sendMesage(token, data.session, data.from,'HOLAAA! o/')
