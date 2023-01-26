@@ -349,8 +349,8 @@ async function startFluxo (data, token) {
 
     const raw = JSON.stringify({
       "phone": data.from.split('@')[0],
+      "message": "Tudo certo "+ data.body,
       "options": {
-        "title": 'Tudo certo '+ data.body +'! Seu '+ storageRegis.opcao +' está marcado para '+ storageRegis.dia +' às ' + data.body + 'está correto?',
         "useTemplateButtons": "true",
         "buttons": [
           {
@@ -362,6 +362,7 @@ async function startFluxo (data, token) {
             "text": (isDEV ? '/bot ' : '') + 'Não'
           },
         ],
+        "title": '! Seu '+ storageRegis.opcao +' está marcado para '+ storageRegis.dia +' às ' + data.body + 'está correto?',
       },
       "isGroup": false
     });
