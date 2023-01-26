@@ -146,7 +146,7 @@ async function startFluxo (data, token) {
     dbFluxo = result
   });
 
-  console.log('redis ->', dbFluxo)
+  console.log('redis ->', JSON.parse(dbFluxo))
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   switch (dbFluxo) {
