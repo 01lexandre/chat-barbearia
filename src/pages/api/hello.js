@@ -1,4 +1,5 @@
 import Redis from "ioredis";
+import moment from "moment";
 
 const redis = new Redis("rediss://default:AVNS_2quGsE82rY0rewkjm8t@naweby-db-session-do-user-9743412-0.b.db.ondigitalocean.com:25061");
 
@@ -192,13 +193,6 @@ async function startFluxo (data, token) {
         'Ótimo! ' + data.body
       )
 
-      const today = new Date();
-      const tomorrow = new Date();
-      tomorrow.setDate(today.getDate()+1);
-
-      const semana = ["Domingo", "Segunda-Feira", "Terça-Feira", "Quarta-Feira", "Quinta-Feira", "Sexta-Feira", "Sábado"];
-      // console.log(tomorrow);
-
       const raw = JSON.stringify({
         "phone": data.from.split('@')[0],
         "buttonText": "Ver opções",
@@ -209,7 +203,7 @@ async function startFluxo (data, token) {
             "rows": [
               {
                 "rowId": "opcao_1",
-                "title": (isDEV ? '/bot ' : '')+semana[today.getDate()+1] + ' - '+ diaMes(tomorrow),
+                "title": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('dd/MM'),
               },
               // {
               //   "rowId": "opcao_1",
