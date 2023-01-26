@@ -139,13 +139,16 @@ const RECONHECIMENTO = 'RECONHECIMENTO'
 const FINALIZAR = 'FINALIZAR'
 
 
-function diaMes (date) {
-  let day = date.getDate();
-  if(day < 10) {day = "0"+day;}
-  let month = date.getMonth() + 1;
-  if(month < 10) {month = "0"+month;}
-  const dateFormat = day + "/" + month;
-  return dateFormat
+async function getRegis(from) {
+  return await redis.get('NW_'+from).then((result) => {
+    if (JSON.parse(result) === null ){
+      return {
+        status: INICIO
+      }
+    } else {
+      return JSON.parse(result)
+    }
+  });
 }
 
 async function startFluxo (data, token) {
@@ -284,17 +287,39 @@ async function startFluxo (data, token) {
   } else if (dbFluxo.status === AGENDAMENTO_DIA) {
     const dia = data.body.split(' - ')[1]
     const diaForm = dia.split('/')[2] + '-' + dia.split('/')[1] + '-' + dia.split('/')[0]
+
+
     const raw = JSON.stringify({
       "phone": data.from.split('@')[0],
       "buttonText": "Ver opções",
-      "description": "Estes sao os horarios que tenho disponivel para "+diaForm+ ' ' + moment(diaForm).calendar(),
+      "description": "Estes sao os horarios que tenho disponivel para "+dia+ ' ' + moment(diaForm).format('dddd').replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase()),
       "sections": [
         {
-          "title": "Dias",
+          "title": "Horas",
           "rows": [
             {
               "rowId": "opcao_1",
-              "title": (isDEV ? '/bot ' : '')+' aasdasdadsdasdasdas',
+              "title": (isDEV ? '/bot ' : '')+' 9:00',
+            },
+            {
+              "rowId": "opcao_2",
+              "title": (isDEV ? '/bot ' : '')+' 10:00',
+            },
+            {
+              "rowId": "opcao_3",
+              "title": (isDEV ? '/bot ' : '')+' 11:00',
+            },
+            {
+              "rowId": "opcao_3",
+              "title": (isDEV ? '/bot ' : '')+' 14:00',
+            },
+            {
+              "rowId": "opcao_3",
+              "title": (isDEV ? '/bot ' : '')+' 15:00',
+            },
+            {
+              "rowId": "opcao_3",
+              "title": (isDEV ? '/bot ' : '')+' 16:00',
             },
           ]
         }
@@ -302,6 +327,26 @@ async function startFluxo (data, token) {
       "isGroup": false
     });
     await sendAlllistMesage(token, data.session, raw)
+
+    const storageRegis = getRegis(data.from)
+    storageRegis.status = AGENDAMENTO_HORA
+    storageRegis.dia = data.body
+
+    redis.set('NW_'+data.from, JSON.stringify(storageRegis))
+  } else if (dbFluxo.status === AGENDAMENTO_HORA) {
+
+
+
+    const storageRegis = getRegis(data.from)
+    await sendMesage(token,
+      data.session,
+      data.from,
+      'status '+ storageRegis.status + ' opcao ' + storageRegis.opcao + ' dia ' + storageRegis.dia
+    )
+    // storageRegis.status = AGENDAMENTO_HORA
+    // storageRegis.dia = data.body
+    //
+    // redis.set('NW_'+data.from, JSON.stringify(storageRegis))
   }
 
   console.log('aquiiiiiiiiii', dbFluxo)
