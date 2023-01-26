@@ -23,5 +23,5 @@ export default async function handler(req, res) {
   //   "isGroup": false
   // }, config).then((x) => {return x})
 
-  res.status(200).json({ re: JSON.stringify(req)})
+  res.status(200).json({ re: req.body})
 }
