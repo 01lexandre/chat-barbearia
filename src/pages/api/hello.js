@@ -336,7 +336,7 @@ async function startFluxo (data, token) {
     await sendMesage(token,
       data.session,
       data.from,
-      '*Perfeito* 😎✂ Mas antes informe para mim seu *nome compelto* fazendo favor para finalizar o agendamento.'
+      '*Perfeito* 😎✂ Mas antes informe para mim seu *nome completo* fazendo favor para finalizar o agendamento.'
     )
 
     storageRegis.status = RECONHECIMENTO
@@ -388,8 +388,10 @@ async function startFluxo (data, token) {
       await sendMesage(token,
         data.session,
         data.from,
-        'Beleza tuedo certo.!'
+        'Beleza tudo certo.!'
       )
+      storageRegis = {status: INICIO}
+      redis.set('NW_'+data.from, JSON.stringify(storageRegis))
       //
 
     } else {
