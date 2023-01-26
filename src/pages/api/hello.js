@@ -142,9 +142,10 @@ async function startFluxo (data, token) {
   let dbFluxo = null
 
   await redis.get(data.from).then((result) => {
-    dbFluxo = result
+    dbFluxo = JSON.parse(result)
   });
   console.log('redis ->', dbFluxo)
+  console.log('redis ->', typeof dbFluxo)
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   switch (dbFluxo) {
