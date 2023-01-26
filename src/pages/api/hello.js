@@ -65,7 +65,7 @@ export default async function handler(req, res) {
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   if (firstWord === '/bot') {
-    await sendMesage(token.token, data.session, data.from,'Ola tudo bemmmmmmmm?')
+    await sendMesage(token.token, data.session, data.from,'Ola qual seu nome?')
   }
 
   res.status(200).json({ re: req.body})
