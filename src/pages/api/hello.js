@@ -124,9 +124,9 @@ export default async function handler(req, res) {
   // redis.set(data.from, {ETAPA: AGENDAMENTO_HORA })
 
 
-  if (firstWord === '/bot') {
-    await sendMesage(token.token, data.session, data.from,'Ola qual seu nome?')
-  }
+  // if (firstWord === '/bot') {
+  //   await sendMesage(token.token, data.session, data.from,'Ola qual seu nome?')
+  // }
   await startFluxo(data, token.token)
   res.status(200).json({ re: req.body})
 }
@@ -146,14 +146,14 @@ async function startFluxo (data, token) {
     dbFluxo = result
   });
 
-  console.log('from', dbFluxo)
+  console.log('redis ->', dbFluxo)
   let firstWord = data.body.substring(0, data.body.indexOf(" "))
 
   switch (dbFluxo) {
     case null:
       if (firstWord === '/bot') {
         redis.set(data.from, {status: INICIO})
-        await sendMesage(token, data.session, data.from,'Ola qual seu nome?')
+        await sendMesage(token, data.session, data.from,'Ola HOLAAA?')
       }
       break;
     default:
