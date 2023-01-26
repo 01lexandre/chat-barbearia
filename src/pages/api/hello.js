@@ -362,7 +362,7 @@ async function startFluxo (data, token) {
             "text": (isDEV ? '/bot ' : '') + 'Não'
           },
         ],
-        "title": '! Seu '+ storageRegis.opcao +' está marcado para '+ storageRegis.dia +' às ' + data.body + 'está correto?',
+        "title": 'Seu '+ storageRegis.opcao +' está marcado para '+ storageRegis.dia +' às ' + storageRegis.hora + 'está correto?',
       },
       "isGroup": false
     });
