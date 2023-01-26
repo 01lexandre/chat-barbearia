@@ -137,11 +137,12 @@ export default async function handler(req, res) {
 }
 
 async function startFluxo (from) {
+  console.log('from', from)
   let dbFluxo = null
 
   await redis.get(from, async (err, result) => {
     if (err) {
-      dbFluxo = JSON.parse(err)
+      dbFluxo = false
     } else {
       dbFluxo = JSON.parse(result)
     }
