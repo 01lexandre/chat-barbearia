@@ -140,13 +140,18 @@ async function startFluxo (from) {
   console.log('from', from)
   let dbFluxo = null
 
-  await redis.get(from, async (err, result) => {
-    if (err) {
-      dbFluxo = false
-    } else {
-      dbFluxo = JSON.parse(result)
-    }
+  redis.get(from).then((result) => {
+    console.log(result); // Prints "value"
+    dbFluxo = result
   });
+
+  // await redis.get(from, async (err, result) => {
+  //   if (err) {
+  //     dbFluxo = false
+  //   } else {
+  //     dbFluxo = JSON.parse(result)
+  //   }
+  // });
 
   console.log('aquiiiiiiiiii', dbFluxo)
 }
