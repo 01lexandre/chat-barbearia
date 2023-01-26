@@ -12,18 +12,16 @@ export default async function handler(req, res) {
   // const sto = storage.getStorage(this, 'authw')
   const config = {
     headers: {
-      'Authorization': 'Bearer $2b$10$VJWa6KLdCgdP6J8_2HIueuh3ljZSHuUJ3DS2Dp1c5lKOajQIbs2bu',
+      'Authorization': 'Bearer $2b$10$J1nOAJ1BNt8iDbdbtztqmOq.un8F5P2wtx1tvHxImFy1rdc2lAlde',
       // 'Content-Language': 'pt-BR'
     }
   };
-  const data = await axios.post(API_URL+'/api/nw-pedro0lexandre/send-message', {
+  const data = await axios.post(API_URL+'/api/nw-alexandre/send-message', {
     "phone": "5544920023965",
     // "phone": "5544998071332",
-    "message": response.mgs,
+    "message": JSON.stringify(req.body),
     "isGroup": false
   }, config).then((x) => {return x})
-  return data.data
-
 
   res.status(200).json({ re: 'data.data '})
 }
