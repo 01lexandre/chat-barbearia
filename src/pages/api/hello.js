@@ -6,7 +6,7 @@ const API_URL = 'https://wpp.treeunfe.com.br'
 
 
 
-async function sendMesage(token, session, message) {
+async function sendMesage(token, session, numero, message) {
 
   console.log('send ', token, session, message)
 
@@ -62,7 +62,7 @@ export default async function handler(req, res) {
   console.error('token', token.token)
 
   if (data.body === '/bot') {
-    await sendMesage(token.token, data.session, 'Ola tudo bemmmmmmmm?')
+    await sendMesage(token.token, data.session, data.from,'Ola tudo bemmmmmmmm?')
   }
 
   res.status(200).json({ re: req.body})
