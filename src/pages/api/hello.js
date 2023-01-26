@@ -134,6 +134,11 @@ async function startFluxo (data, token) {
 
   if (firstWord === '/del') {
     redis.set('NW_'+data.from, JSON.stringify({status: INICIO }))
+    await sendMesage(token,
+      data.session,
+      data.from,
+      'Zerado o BOT'
+    )
   }
   if (dbFluxo.status === INICIO) {
     if (firstWord === '/bot') {
