@@ -141,7 +141,7 @@ async function startFluxo (data, token) {
   console.log('from', data.from)
   let dbFluxo = null
 
-  redis.get(data.from).then((result) => {
+  await redis.get(data.from).then((result) => {
     console.log(result); // Prints "value"
     dbFluxo = result
   });
