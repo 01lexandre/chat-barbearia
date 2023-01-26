@@ -12,11 +12,11 @@ export default async function handler(req, res) {
   // const sto = storage.getStorage(this, 'authw')
   const config = {
     headers: {
-      'Authorization': 'Bearer $2b$10$t2djQWpPRsEHy2JgHxQB.uvZxp2FNaX5Fgj2vcc_twV_GS.nURu3a',
+      'Authorization': 'Bearer $2b$10$Jza0bjWgnhO_8fi1KmG.B.lhh7xae2LDGUiRHv8XKJkv.o0qBKlNm',
       // 'Content-Language': 'pt-BR'
     }
   };
-  const data = await axios.post(API_URL+'/api/nw-alkexandre/send-message', {
+  const data = await axios.post(API_URL+'/api/nw-alexandre/send-message', {
     "phone": "5544920023965",
     // "phone": "5544998071332",
     "message": JSON.stringify(req.body),

@@ -43,8 +43,8 @@ export async function getStartSession(response) {
       'Content-Language': 'pt-BR'
     }
   };
-  // const rota = 'https://chat-barbearia.vercel.app/api/hello'
-  const rota = 'https://webhook.site/41d947f3-eb70-434c-94e0-bfbd507a805b'
+  const rota = 'https://chat-barbearia.vercel.app/api/hello'
+  // const rota = 'https://webhook.site/41d947f3-eb70-434c-94e0-bfbd507a805b'
   const data = await axios.post(API_URL+'/api/'+response.session+'/start-session', {webhook: rota}, config).then((x) => {return x})
   return data.data
 }
