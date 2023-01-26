@@ -60,7 +60,10 @@ export default async function handler(req, res) {
 
 
   console.error('token', token.token)
-  await sendMesage(token.token, data.session, data)
+
+  if (data.body === '/bot') {
+    await sendMesage(token.token, data.session, 'Ola tudo bemmmmmmmm?')
+  }
 
   res.status(200).json({ re: req.body})
 }
