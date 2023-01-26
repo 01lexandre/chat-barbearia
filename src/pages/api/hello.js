@@ -142,7 +142,7 @@ async function startFluxo (data, token) {
   let dbFluxo = null
 
   await redis.get(data.from).then((result) => {
-    dbFluxo = JSON.parse(result)
+    dbFluxo = result
   });
   console.log('redis ->', dbFluxo)
   console.log('redis ->', typeof dbFluxo)
@@ -151,7 +151,7 @@ async function startFluxo (data, token) {
   switch (dbFluxo) {
     case null:
       if (firstWord === '/bot') {
-        redis.set(data.from, {status: INICIO})
+        redis.set(data.from, JSON.stringify({status: INICIO}))
         await sendMesage(token, data.session, data.from,'Ola HOLAAA?')
       }
       break;
