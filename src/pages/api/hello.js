@@ -93,6 +93,30 @@ async function sendButton(token, session, raw) {
   const data = await response.json()
   console.log('sendMesage', data)
 }
+async function sendStecker(token, session, raw) {
+
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  myHeaders.append("Authorization", "Bearer " + token);
+
+  const requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+  //
+  // fetch(API_URL+'/api/'+data.session+'/send-message', requestOptions)
+  //   .then(response => response.text())
+  //   .then(result => console.log(result))
+  //   .catch(error => console.log('error', error));
+
+
+  const response = await fetch(API_URL+'/api/'+session+'/send-sticker', requestOptions)
+  // const response = await fetch(API_URL+'/api/'+session+'/send-message', requestOptions)
+  const data = await response.json()
+  console.log('sendMesage', data)
+}
 
 export default async function handler(req, res) {
 
@@ -335,18 +359,102 @@ async function startFluxo (data, token) {
     redis.set('NW_'+data.from, JSON.stringify(storageRegis))
   } else if (dbFluxo.status === AGENDAMENTO_HORA) {
 
-
-
     const storageRegis = await getRegis(data.from)
+
     await sendMesage(token,
       data.session,
       data.from,
-      'status '+ storageRegis.status + ' opcao ' + storageRegis.opcao + ' dia ' + storageRegis.dia
+      '*Perfeito* 😎✂ Mas antes informe para mim seu *nome compelto* fazendo favor para finalizar o agendamento.'
     )
-    // storageRegis.status = AGENDAMENTO_HORA
-    // storageRegis.dia = data.body
-    //
-    // redis.set('NW_'+data.from, JSON.stringify(storageRegis))
+
+    storageRegis.status = RECONHECIMENTO
+    storageRegis.hora = data.body
+
+    redis.set('NW_'+data.from, JSON.stringify(storageRegis))
+  } else if (dbFluxo.status === RECONHECIMENTO) {
+    const storageRegis = await getRegis(data.from)
+
+    await sendMesage(token,
+      data.session,
+      data.from,
+      'Tudo certo '+ data.body
+    )
+
+    const raw = JSON.stringify({
+      "phone": data.from.split('@')[0],
+      "options": {
+        "title": 'Seu '+ storageRegis.opcao +' está marcado para '+ storageRegis.dia +' às ' + data.body + 'está correto?',
+        "useTemplateButtons": "true",
+        "buttons": [
+          {
+            "id": "1",
+            "text": (isDEV ? '/bot ' : '') + 'Sim'
+          },
+          {
+            "id": "2",
+            "text": (isDEV ? '/bot ' : '') + 'Não'
+          },
+        ],
+      },
+      "isGroup": false
+    });
+    await sendButton(token, data.session, raw)
+
+    storageRegis.status = FINALIZAR
+    storageRegis.nome = data.body
+
+    redis.set('NW_'+data.from, JSON.stringify(storageRegis))
+  } else if (dbFluxo.status === FINALIZAR) {
+
+    let storageRegis = await getRegis(data.from)
+    if (data.body === (isDEV ? '/bot ' : '') + 'Sim') {
+      const raw = JSON.stringify({
+        "phone": data.from.split('@')[0],
+        'path': 'https://cdn.nawe.by/images/zabarbershop.png',
+        "isGroup": false
+      });
+      await sendStecker(token, data.session, raw)
+
+
+      await sendMesage(token,
+        data.session,
+        data.from,
+        'Beleza tuedo certo.!'
+      )
+      //
+
+    } else {
+      await sendMesage(token,
+        data.session,
+        data.from,
+        'Tudo certo vamos começar novamente.'
+      )
+
+      const raw = JSON.stringify({
+        "phone": data.from.split('@')[0],
+        "buttonText": "Ver opções",
+        "description": "Como posso ajudar você hoje? ",
+        "sections": [
+          {
+            "title": "Serviços",
+            "rows": [
+              {
+                "rowId": "opcao_1",
+                "title": (isDEV ? '/bot ' : '')+"Cortar o Cabelo",
+              },
+              {
+                "rowId": "opcao_2",
+                "title": (isDEV ? '/bot ' : '')+"Cortar a Barba",
+              }
+            ]
+          }
+        ],
+        "isGroup": false
+      });
+      await sendAlllistMesage(token, data.session, raw)
+      storageRegis = {status: SERVICOS}
+      redis.set('NW_'+data.from, JSON.stringify(storageRegis))
+    }
   }
 
   console.log('aquiiiiiiiiii', dbFluxo)
