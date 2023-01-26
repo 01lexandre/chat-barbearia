@@ -1,6 +1,5 @@
 import Redis from "ioredis";
 import moment from "moment";
-moment.locale('pt-br');
 const redis = new Redis("rediss://default:AVNS_2quGsE82rY0rewkjm8t@naweby-db-session-do-user-9743412-0.b.db.ondigitalocean.com:25061");
 
 const API_URL = 'https://wpp.treeunfe.com.br'
@@ -124,6 +123,7 @@ function diaMes (date) {
 }
 
 async function startFluxo (data, token) {
+  moment.locale('pt-br');
   let dbFluxo = {
     status: INICIO
   }
@@ -211,7 +211,7 @@ async function startFluxo (data, token) {
               },
               {
                 "rowId": "opcao_2",
-                "title": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM'),
+                "title": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM/YY'),
               },
             ]
           }
@@ -222,6 +222,25 @@ async function startFluxo (data, token) {
 
       redis.set('NW_'+data.from, JSON.stringify({status: AGENDAMENTO_DIA, opcao: data.body}))
     }
+  } else if (dbFluxo.status === AGENDAMENTO_DIA) {
+    const dia = data.body.split(' - ')[1]
+    const raw = JSON.stringify({
+      "phone": data.from.split('@')[0],
+      "buttonText": "Ver opções",
+      "description": "Estes sao os horarios que tenho disponivel para "+ moment(dia).calendar(),
+      "sections": [
+        {
+          "title": "Dias",
+          "rows": [
+            {
+              "rowId": "opcao_1",
+              "title": (isDEV ? '/bot ' : '')+' aasdasdadsdasdasdas',
+            },
+          ]
+        }
+      ],
+      "isGroup": false
+    });
   }
 
   console.log('aquiiiiiiiiii', dbFluxo)
