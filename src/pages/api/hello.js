@@ -1,6 +1,6 @@
 import Redis from "ioredis";
 import moment from "moment";
-
+moment.locale('pt-br');
 const redis = new Redis("rediss://default:AVNS_2quGsE82rY0rewkjm8t@naweby-db-session-do-user-9743412-0.b.db.ondigitalocean.com:25061");
 
 const API_URL = 'https://wpp.treeunfe.com.br'
@@ -203,12 +203,16 @@ async function startFluxo (data, token) {
             "rows": [
               {
                 "rowId": "opcao_1",
-                "title": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('dd/MM'),
+                "title": (isDEV ? '/bot ' : '')+moment().add(1, 'days').format('dddd') + ' - '+ moment().add(1, 'days').format('DD/MM'),
               },
-              // {
-              //   "rowId": "opcao_1",
-              //   "title": (isDEV ? '/bot ' : '')+semana[today.getDate()+2] + ' - '+ diaMes(tomorrow.setDate(today.getDate()+2)),
-              // },
+              {
+                "rowId": "opcao_2",
+                "title": (isDEV ? '/bot ' : '')+moment().add(2, 'days').format('dddd') + ' - '+ moment().add(2, 'days').format('DD/MM'),
+              },
+              {
+                "rowId": "opcao_2",
+                "title": (isDEV ? '/bot ' : '')+moment().add(3, 'days').format('dddd') + ' - '+ moment().add(3, 'days').format('DD/MM'),
+              },
             ]
           }
         ],
