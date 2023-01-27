@@ -75,7 +75,7 @@ export default function Home() {
   useEffect(() => {
     const token = storage.getStorage(this, 'authw')
     console.log(token)
-    if (token.session) {
+    if (token?.session) {
       async function fetchData() {
         // You can await here
         const response = await getCheckSession();
