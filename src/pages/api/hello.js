@@ -210,13 +210,17 @@ async function startFluxo (data, token) {
       await sendMesage(token,
         data.session,
         data.from,
-        'Olá! Bem-vindo à *ZAPBarberShop*. Estamos prontos para atender suas necessidades de corte de cabelo e barba, desde cortes clássicos até os mais modernos. Temos uma equipe de barbeiros experientes prontos para fazer você se sentir e parecer incrível. Agende hoje e venha experimentar a qualidade do nosso atendimento e dos nossos serviços.'
+        `
+          Olá! Seja bem-vindo à ZAPBarberShop. Estamos prontos para atender suas necessidades de corte de cabelo e barba, desde cortes clássicos até os mais modernos.
+          Temos uma equipe de barbeiros experientes prontos para fazer você se sentir e parecer incrível. Agende hoje e venha experimentar a qualidade do nosso atendimento
+          e dos nossos serviços.
+        `
       )
 
       const raw = JSON.stringify({
         "phone": data.from.split('@')[0],
         "buttonText": "Ver opções",
-        "description": "Como posso ajudar você hoje? ",
+        "description": "Com qual tipo de serviço podemos te ajudar hoje?",
         "sections": [
           {
             "title": "Serviços",
@@ -243,11 +247,11 @@ async function startFluxo (data, token) {
       await sendMesage(token,
         data.session,
         data.from,
-        'Ótimo! ' + data.body
+        'Perfeito! ' + data.body
       )
       const raw = JSON.stringify({
         "phone": data.from.split('@')[0],
-        "message": "Selecione a data que desejar.",
+        "message": "Selecione a data que desejar",
         "options": {
           "useTemplateButtons": "true",
           "buttons": [
@@ -272,7 +276,7 @@ async function startFluxo (data, token) {
               "text": (isDEV ? '/bot ' : '')+moment().add(5, 'days').format('dddd') + ' - '+ moment().add(5, 'days').format('DD/MM/YYYY')
             },
           ],
-          "title": "Veja as opções de dias que tenho disponiveis?",
+          "title": "Para este serviço nós temos horários disponíveis nos seguintes dias",
         },
         "isGroup": false
       });
@@ -288,7 +292,7 @@ async function startFluxo (data, token) {
     const raw = JSON.stringify({
       "phone": data.from.split('@')[0],
       "buttonText": "Ver opções",
-      "description": "Estes sao os horarios que tenho disponivel para "+dia+ ' ' + moment(diaForm).format('dddd').replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase()),
+      "description": "Estes são os horários 🕔 que tenho disponível para "+dia+ ' ' + moment(diaForm).format('dddd').replace(/(^\w{1})|(\s+\w{1})/g, letra => letra.toUpperCase()),
       "sections": [
         {
           "title": "Horas",
@@ -336,7 +340,7 @@ async function startFluxo (data, token) {
     await sendMesage(token,
       data.session,
       data.from,
-      '*Perfeito* 😎✂ Mas antes informe para mim seu *nome completo* fazendo favor para finalizar o agendamento.'
+      '*Maravilha* 😎✂ agora precisamos que você nos informe o seu *NOME COMPLETO* para finalizarmos o agendamento 😃'
     )
 
     storageRegis.status = RECONHECIMENTO
@@ -362,7 +366,7 @@ async function startFluxo (data, token) {
             "text": (isDEV ? '/bot ' : '') + 'Não'
           },
         ],
-        "title": 'Seu serviço '+ storageRegis.opcao +' está marcado para '+ storageRegis.dia +' às ' + storageRegis.hora + ' está correto '+data.body+'?',
+        "title": 'Show '+data.body+'. Seu serviço '+storageRegis.opcao+' está marcado para '+ storageRegis.dia +' às ' + storageRegis.hora + '. Tudo certo?',
       },
       "isGroup": false
     });
@@ -388,7 +392,7 @@ async function startFluxo (data, token) {
       await sendMesage(token,
         data.session,
         data.from,
-        'Beleza tudo certo.!'
+        'Magnífico então. Estaremos te aguardando ansiosamente no dia e horário marcado.'
       )
       storageRegis = {status: INICIO}
       redis.set('NW_'+data.from, JSON.stringify(storageRegis))
